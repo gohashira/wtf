@@ -1,0 +1,25 @@
+version: '3'
+
+vars:
+  BINARY_NAME: gohashira_wtf
+
+tasks:
+  build:
+    desc: Build the cargo program in release mode
+    # Optional: Prevents rebuilding if source files haven't changed
+    sources:
+      - src/**/*.rs
+      - Cargo.toml
+    generates:
+      - target/release/{{.BINARY_NAME}}
+    cmds:
+      - cargo build --release
+
+  install:
+    desc: Install the binary to the local bin directory
+    deps: [build]
+    cmds:
+      # Ensure the destination directory exists
+      - mkdir -p $HOME/.local/bin
+      - cp target/release/{{.BINARY_NAME}} $HOME/.local/bin/
+      - echo "Installed {{.BINARY_NAME}} to $HOME/.local/bin/"
